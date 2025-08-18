@@ -1,6 +1,6 @@
 import netmiko
 from netmiko import ConnectHandler
-import pandas as pd
+
 
 switch = {
     'device_type':'cisco_ios',
@@ -45,21 +45,21 @@ def power():
     
     ssh.disconnect
 
-
-flag = True
-while flag:
-    print()
-    print('======')
-    print('>>>',end='')
-    a = input()
-    if a == 'on':
-        noshutdown()
-    elif a =='off':
-        shutdown()
-    elif a=='peek':
-        peek()
-    elif a=='power':
-        power()
-    elif a=='end':
-        flag = False
+def run():
+    flag = True
+    while flag:
+        print()
+        print('======')
+        print('>>>',end='')
+        a = input()
+        if a == 'on':
+            noshutdown()
+        elif a =='off':
+            shutdown()
+        elif a=='peek':
+            peek()
+        elif a=='power':
+            power()
+        elif a=='end':
+            flag = False
     
