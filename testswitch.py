@@ -39,8 +39,8 @@ def power():
     ssh = ConnectHandler(**switch)
     ssh.enable()
     output = ssh.send_command('show power inline')
-    frame = pd.DataFrame(output)
-    print(frame)
+    
+    print(output)
 
     
     ssh.disconnect
