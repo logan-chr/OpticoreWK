@@ -22,10 +22,11 @@ def off():
         # Writing to a file
     uptime = round((time.time()-start),2)
     with open('file.txt', 'a') as file:
-        file.write((str(datetime.date)+str(datetime.time)+str(uptime)+'s'+'/n'))
+        file.write((str(datetime.now())+' UPT:'+str(uptime)+'s'+'/n'))
         uptime = 0
         print(uptime)
     while not (sense() or flick):
+        inp()
         pass
     flick = False
     start = time.time()
@@ -40,6 +41,7 @@ def take(inp):
         latest= start
     elif inp =='off':
         off()
+        start = time.time()
     elif inp=='peek':
         print(peek())
     elif inp=='power':
