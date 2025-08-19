@@ -46,13 +46,7 @@ def power():
     
     ssh.disconnect
 
-def run():
-    flag = True
-    while flag:
-        print()
-        print('======')
-        print('>>>',end='')
-        a = input()
+def run(a):
         if a == 'on':
             noshutdown()
         elif a =='off':
@@ -61,6 +55,5 @@ def run():
             peek()
         elif a=='power':
             power()
-        elif a=='end':
-            flag = False
+
     
