@@ -3,12 +3,13 @@ from sensor import sense
 import time
 from datetime import datetime
 import keyboard
+import os
 
 import threading
 
 
 noshutdown()
-MAXTIME = 15
+MAXTIME = 30
 timeout = MAXTIME
 start = time.time()
 latest = time.time()
@@ -49,6 +50,7 @@ def off():
     start = time.time()
 def take(inp):
     global start, latest, flick
+    os.system('clear')
     print('>>>'+inp)
     if inp == 'on':
         on()
@@ -90,12 +92,12 @@ def func():
         latest= time.time()
    
         if not peek():
-            
             on()
-    if time.time() - latest > MAXTIME:
+    timedif = (time.time() - latest )
+    if timedif > MAXTIME:
         print('timeout')
         off()
-        print('stuck?')
+
         start = time.time()    
 def main_loop():
     while True:
