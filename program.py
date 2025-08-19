@@ -8,7 +8,7 @@ import threading
 
 
 noshutdown()
-MAXTIME = 5
+MAXTIME = 15
 timeout = MAXTIME
 start = time.time()
 latest = time.time()
@@ -26,7 +26,6 @@ def on():
     start = time.time()
 
     latest= start
-
 def off():
     global start
     global flick
@@ -40,13 +39,11 @@ def off():
     file.write((str(datetime.now())[:-7]+' UPT:'+str(uptime)+'s'+'\n'))
     uptime = 0
     print(uptime)
-    print('why')
-    print(flick)
+   
     while not (sense() or flick):
-        print('hi')
+
         inp()
-        print('stuck')
-        pass
+     
     
     flick = False
     start = time.time()
@@ -85,22 +82,22 @@ def take(inp):
     else:
         print('instruction not recognised')
 def func():
+   
     global latest
 
     if sense():
         
         latest= time.time()
-        
+   
         if not peek():
+            
             on()
-    print(time.time()-latest)
     if time.time() - latest > MAXTIME:
         print('timeout')
         off()
         print('stuck?')
         start = time.time()    
 def main_loop():
-
     while True:
 
         current_date = datetime.now()
@@ -108,7 +105,6 @@ def main_loop():
         if day_of_week in weekdays:
             
             while datetime.now().hour>6 and datetime.now().hour < 20:
-                print('running')
                 func()
             while datetime.now().hour<6 or datetime.now().hour > 20:
                 if not peek():
