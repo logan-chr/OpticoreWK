@@ -1,10 +1,6 @@
-from testswitch import *
-import threading
-def inp():
-    while True:
-        a = input()
-        run(a)
+import csv
 
-while True:
-    t1 = threading.Thread(target=inp)
-    print('a')
+with open('file.csv',mode='a',newline='') as file:
+    writer  =csv.writer(file)
+    writer.writerow([2,3,2])
+print('hi')

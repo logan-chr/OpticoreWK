@@ -5,7 +5,8 @@ from datetime import datetime
 import keyboard
 import os
 import threading
-
+import pandas as pd
+import csv
 
 noshutdown()
 MAXTIME = 30
@@ -15,6 +16,11 @@ latest = time.time()
 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 flick = False
 
+
+with open('file.csv', 'r') as file:
+    reader = csv.reader(file)
+    length = sum(1 for row in reader) - 1
+    
 def on():
     global start
     global latest
@@ -27,6 +33,7 @@ def on():
 
     latest= start
 def off():
+    global length
     global start
     global flick
     w = float(power())
@@ -35,8 +42,9 @@ def off():
         # Writing to a file
     uptime = round((time.time()-start),2)
     print(round(w*uptime,2),' joules consumed')
-    file = open('file.txt', 'a')
-    file.write((str(datetime.now())[:-7]+' UPT:'+str(uptime)+'s'+'\n'))
+    with open('file.csv', mode='a',newline='',encoding='utf-8') as file:
+        writer  =csv.writer(file)
+        writer.writerow(pd.DataFrame({'date':str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')),'uptime':(uptime)},index=[length]))
     uptime = 0
     print(uptime)
    
@@ -73,17 +81,25 @@ def take(inp):
         print()
         print('on\noff\npeek\npower\nupt (uptime)\nhistory\nclear\ntotal')
     elif inp=='history':
-        with open('file.txt', 'r') as file:
-            content = file.read()
-            print(content)
-    elif inp=='clear':
-        with open("file.txt", "w") as file:
+        with open('file.csv', mode='r',newline='') as file:
+            print('h')
+            if os.path.getsize('file.csv') > 0:
+                content = pd.read_csv('file.csv',encoding='utf-8')
+
+                print(content)
+            else:
+                print()
+    elif inp=='clear': 
+        with open("file.csv", mode="w",newline='') as file:
             pass 
     elif inp=='total':
         total = 0
-        f = open('file.txt','r')
-        lines = f.readlines()
-        for i in range(len(lines)):
+        with open('file.csv', mode='r',newline='') as file:
+            print('h')
+            if os.path.getsize('file.csv') > 0:
+                content = pd.read_csv('file.csv',encoding='utf-8')
+
+                
             total += (float((lines[i].replace('s','')[24:]).replace("\n", "")))
         print('total uptime in history:',total)
         print('that\'s',round(total*15.4,4),'W')
