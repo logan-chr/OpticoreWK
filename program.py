@@ -3,18 +3,29 @@ from sensor import sense
 import time
 from datetime import datetime
 import keyboard
-import os
+
 import threading
 
 
 noshutdown()
-MAXTIME = 30
+MAXTIME = 5
 timeout = MAXTIME
 start = time.time()
 latest = time.time()
 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 flick = False
 
+def on():
+    global start
+    global latest
+    global flick
+    noshutdown()
+    print('powering on')
+    flick = True        
+
+    start = time.time()
+
+    latest= start
 
 def off():
     global start
@@ -25,27 +36,25 @@ def off():
         # Writing to a file
     uptime = round((time.time()-start),2)
     print(round(w*uptime,2),' joules consumed')
-    with open('file.txt', 'a') as file:
-        file.write((str(datetime.now())[:-7]+' UPT:'+str(uptime)+'s'+'\n'))
-        uptime = 0
-        print(uptime)
-    
+    file = open('file.txt', 'a')
+    file.write((str(datetime.now())[:-7]+' UPT:'+str(uptime)+'s'+'\n'))
+    uptime = 0
+    print(uptime)
+    print('why')
+    print(flick)
     while not (sense() or flick):
+        print('hi')
         inp()
+        print('stuck')
         pass
+    
     flick = False
     start = time.time()
 def take(inp):
-    global start, latest
-    os.system('clear')
+    global start, latest, flick
     print('>>>'+inp)
     if inp == 'on':
-        print('powering on')
-        flick = True
-        noshutdown()
-        flick = True
-        start = time.time()
-        latest= start
+        on()
     elif inp =='off':
         print('powering down...')
         off()
@@ -83,16 +92,12 @@ def func():
         latest= time.time()
         
         if not peek():
-            print('powering on')
-            flick = True
-            noshutdown()
-            flick = True
-            start = time.time()
-            latest= start
+            on()
+    print(time.time()-latest)
     if time.time() - latest > MAXTIME:
         print('timeout')
         off()
-        
+        print('stuck?')
         start = time.time()    
 def main_loop():
 
@@ -102,7 +107,8 @@ def main_loop():
         day_of_week = current_date.strftime("%A")
         if day_of_week in weekdays:
             
-            while datetime.now().hour<6 or datetime.now().hour < 20:
+            while datetime.now().hour>6 and datetime.now().hour < 20:
+                print('running')
                 func()
             while datetime.now().hour<6 or datetime.now().hour > 20:
                 if not peek():
@@ -117,7 +123,7 @@ def inp():
         print('>>>',end='')
         a = input()
         take(a)
-os.system('clear')
+
 thread = threading.Thread(target=main_loop,daemon=True)
 
 thread.start()
