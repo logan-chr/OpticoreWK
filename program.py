@@ -5,7 +5,8 @@ noshutdown()
 timeout = 30
 while True:
     print(timeout)
-    timeout -=1
+    if timeout > 0:
+        timeout -=1
     time.sleep(1)
     if sense():
         timeout = 30
@@ -15,6 +16,8 @@ while True:
     if timeout <= 0:
         shutdown()
         print('timeout, power turned off')
+        while not sense():
+            pass
 
 
 
