@@ -41,10 +41,11 @@ def power():
     ssh = ConnectHandler(**switch)
     ssh.enable()
     output = ssh.send_command('show power inline fa0/3 | include auto')
-    print(output[28:33].replace(' ',''))
+    ssh.disconnect
+    return(output[28:33].replace(' ',''))
 
     
-    ssh.disconnect
+
 
 def run(inp):
         if inp == 'on':

@@ -17,14 +17,17 @@ flick = False
 def off():
     global start
     global flick
+    w = float(power())
     shutdown()
     print('power turned off')
         # Writing to a file
     uptime = round((time.time()-start),2)
+    print(round(w*uptime,2),' joules consumed')
     with open('file.txt', 'a') as file:
-        file.write((str(datetime.now())+' UPT:'+str(uptime)+'s'+'/n'))
+        file.write((str(datetime.now())+' UPT:'+str(uptime)+'s'+'\n'))
         uptime = 0
         print(uptime)
+    
     while not (sense() or flick):
         inp()
         pass
@@ -45,7 +48,7 @@ def take(inp):
     elif inp=='peek':
         print(peek())
     elif inp=='power':
-        power()
+        print(power())
     elif inp=='upt':
         if peek():
             print('total uptime:',round(time.time()-start,2))
