@@ -4,7 +4,6 @@ import time
 from datetime import datetime
 import keyboard
 import os
-
 import threading
 
 
@@ -80,7 +79,14 @@ def take(inp):
     elif inp=='clear':
         with open("file.txt", "w") as file:
             pass 
-
+    elif inp=='total':
+        total = 0
+        f = open('file.txt','r')
+        lines = f.readlines()
+        for i in range(len(lines)):
+            total += (float((lines[i].replace('s','')[24:]).replace("\n", "")))
+        print('total uptime in history:',total)
+        print('that\'s',total*15.4,'W')
     else:
         print('instruction not recognised')
 def func():
@@ -122,6 +128,7 @@ def inp():
         a = input()
         take(a)
 
+os.system('clear')
 thread = threading.Thread(target=main_loop,daemon=True)
 
 thread.start()
