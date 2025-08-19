@@ -14,6 +14,8 @@ start = time.time()
 latest = time.time()
 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 flick = False
+
+
 def off():
     global start
     global flick
@@ -24,7 +26,7 @@ def off():
     uptime = round((time.time()-start),2)
     print(round(w*uptime,2),' joules consumed')
     with open('file.txt', 'a') as file:
-        file.write((str(datetime.now())+' UPT:'+str(uptime)+'s'+'\n'))
+        file.write((str(datetime.now())[:-7]+' UPT:'+str(uptime)+'s'+'\n'))
         uptime = 0
         print(uptime)
     
@@ -35,52 +37,71 @@ def off():
     start = time.time()
 def take(inp):
     global start, latest
-    print('>>>',inp)
+    os.system('clear')
+    print('>>>'+inp)
     if inp == 'on':
+        print('powering on')
         flick = True
         noshutdown()
         flick = True
         start = time.time()
         latest= start
     elif inp =='off':
+        print('powering down...')
         off()
         start = time.time()
     elif inp=='peek':
         print(peek())
     elif inp=='power':
-        print(power())
+        print(power(),'W')
     elif inp=='upt':
         if peek():
             print('total uptime:',round(time.time()-start,2))
             print(round(MAXTIME-(time.time()-latest),2),'left')
         else:
             print(0)
+    elif inp=='help':
+        print()
+        print('instructions:')
+        print()
+        print('on\noff\npeek\npower\nupt (uptime)\nhistory\nclear')
+    elif inp=='history':
+        with open('file.txt', 'r') as file:
+            content = file.read()
+            print(content)
+    elif inp=='clear':
+        with open("file.txt", "w") as file:
+            pass 
+
     else:
         print('instruction not recognised')
 def func():
     global latest
 
     if sense():
-        print('sensing')
+        
         latest= time.time()
-       
+        
         if not peek():
-                noshutdown()
-                print('power turned on')
+            print('powering on')
+            flick = True
+            noshutdown()
+            flick = True
+            start = time.time()
+            latest= start
     if time.time() - latest > MAXTIME:
         print('timeout')
         off()
         
-        start = time.time()
-    
+        start = time.time()    
 def main_loop():
+
     while True:
-        os.system('clear')
+
         current_date = datetime.now()
-    
         day_of_week = current_date.strftime("%A")
         if day_of_week in weekdays:
-            print(datetime.now().hour)
+            
             while datetime.now().hour<6 or datetime.now().hour < 20:
                 func()
             while datetime.now().hour<6 or datetime.now().hour > 20:
@@ -93,10 +114,12 @@ def main_loop():
             func()
 def inp():
     while True:
+        print('>>>',end='')
         a = input()
         take(a)
-        
+os.system('clear')
 thread = threading.Thread(target=main_loop,daemon=True)
+
 thread.start()
 
 inp()
