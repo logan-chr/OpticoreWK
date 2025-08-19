@@ -1,6 +1,7 @@
 import netmiko
 from netmiko import ConnectHandler
-
+import time
+import datetime
 
 switch = {
     'device_type':'cisco_ios',
@@ -39,21 +40,23 @@ def power():
  
     ssh = ConnectHandler(**switch)
     ssh.enable()
-    output = ssh.send_command('show power inline')
-    
-    print(output)
+    output = ssh.send_command('show power inline fa0/3 | include auto')
+    print(output[28:33].replace(' ',''))
 
     
     ssh.disconnect
 
-def run(a):
-        if a == 'on':
+def run(inp):
+        if inp == 'on':
             noshutdown()
-        elif a =='off':
+        elif inp =='off':
             shutdown()
-        elif a=='peek':
+        elif inp=='peek':
             peek()
-        elif a=='power':
+        elif inp=='power':
             power()
-
-    
+        elif inp=='upt':
+            print('total uptime:',round(time.time()-start,2))
+            print(round(MAXTIME-(time.time()-latest),2),'left')
+        else:
+            print('instruction not recognised')

@@ -1,6 +1,9 @@
-import datetime
-import math
-import time
+from testswitch import *
+import threading
+def inp():
+    a = input()
+    run(a)
 
-
-print(time.time())
+while True:
+    t1 = threading.Thread(target=inp)
+    print('a')
