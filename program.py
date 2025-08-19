@@ -71,7 +71,7 @@ def take(inp):
         print()
         print('instructions:')
         print()
-        print('on\noff\npeek\npower\nupt (uptime)\nhistory\nclear')
+        print('on\noff\npeek\npower\nupt (uptime)\nhistory\nclear\ntotal')
     elif inp=='history':
         with open('file.txt', 'r') as file:
             content = file.read()
@@ -86,15 +86,17 @@ def take(inp):
         for i in range(len(lines)):
             total += (float((lines[i].replace('s','')[24:]).replace("\n", "")))
         print('total uptime in history:',total)
-        print('that\'s',total*15.4,'W')
+        print('that\'s',round(total*15.4,4),'W')
+    elif inp =='':
+        print()
     else:
-        print('instruction not recognised')
+        print(inp,'is not a known instruction')
 def func():
    
     global latest
 
     if sense():
-        
+        print('s')
         latest= time.time()
    
         if not peek():
