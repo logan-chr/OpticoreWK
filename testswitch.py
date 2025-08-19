@@ -16,21 +16,23 @@ def shutdown():
     ssh.enable()
     arr = ['configure terminal','interface fastEthernet 0/3','shutdown','exit','logout']
     ssh.send_config_set(arr)
+    ssh.disconnect
 
 def noshutdown():
     ssh = ConnectHandler(**switch)
     ssh.enable()
     arr = ['configure terminal','interface fastEthernet 0/3','no shutdown','exit','logout']
     ssh.send_config_set(arr)
+    ssh.disconnect()
 def peek():
     ssh = ConnectHandler(**switch)
     ssh.enable()
-    output = ssh.send_command('show running-config interface fastEthernet 0/3')
+    output = ssh.send_command('show running-config interface fastEthernet 0/3',)
+    ssh.disconnect()
     if 'shutdown' in output:
-        print('off')
+        return False
     else:
-        print('on')
-    ssh.disconnect
+        return True
 
 
 def power():
