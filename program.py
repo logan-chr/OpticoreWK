@@ -2,13 +2,12 @@ from testswitch import switch, noshutdown,shutdown,peek,power
 from sensor import sensor
 import time
 from datetime import datetime
-import keyboard
 import os
 import threading
 import csv
 
 noshutdown()
-MAXTIME = 10
+MAXTIME = 60
 timeout = MAXTIME
 start = time.time()
 latest = time.time()
@@ -22,6 +21,9 @@ def update_stats():
     global start
     uptime = round((time.time()-start),2)
     total = uptime
+    seconds_since_year_start = (datetime.now() - datetime(datetime.now().year, 1, 1)).total_seconds()
+
+
     with open('file.csv', mode='r') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
@@ -36,7 +38,7 @@ def update_stats():
     htmlprint(str('or '+str(round(0.394*(total*15.4)/360000,4))+' Kg of Carbon Dioxide'))
 
     htmlprint('<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Refresh Button</title></head><body><button onclick="location.reload()">Refresh Page</button>')
-
+    htmlprint(str('since January 1 2025, you have saved '+str(round(seconds_since_year_start-round(total)))+' seconds'))
 def write(array):
     with open('file.csv','a',newline='') as file:
         writer  =csv.writer(file)
@@ -70,8 +72,10 @@ def off():
     uptime = round((time.time()-start),2)
     print(round(w*uptime,2),' joules consumed')
     write([str(datetime.now())[:-7],uptime])
-    update_stats()
+    
     uptime = 0
+    start = time.time()
+    update_stats()
     print(uptime)
     while (not(flag) and not(sensor.scan())):
         func()
@@ -151,7 +155,7 @@ def func():
     global latest
     global flag
     uptime = round((time.time()-start),2)
-    if round(uptime/2,0) == uptime/2 and peek():
+    if round(uptime/2,0) == uptime/2:
 
 
         update_stats()
