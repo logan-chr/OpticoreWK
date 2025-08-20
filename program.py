@@ -5,7 +5,6 @@ from datetime import datetime
 import keyboard
 import os
 import threading
-import pandas as pd
 import csv
 
 noshutdown()
@@ -17,10 +16,17 @@ weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 flick = False
 
 
-with open('file.csv', 'r') as file:
-    reader = csv.reader(file)
-    length = sum(1 for row in reader) - 1
-    
+def write(array):
+    with open('file.csv','a',newline='') as file:
+        writer  =csv.writer(file)
+        writer.writerow((array))
+def read():
+    with open('file.csv', mode='r') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            
+            print(row[0],': ',row[1])
+
 def on():
     global start
     global latest
@@ -42,12 +48,10 @@ def off():
         # Writing to a file
     uptime = round((time.time()-start),2)
     print(round(w*uptime,2),' joules consumed')
-    with open('file.csv', mode='a',newline='',encoding='utf-8') as file:
-        writer  =csv.writer(file)
-        writer.writerow(pd.DataFrame({'date':str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')),'uptime':(uptime)},index=[length]))
+    write([str(datetime.now())[:-7],uptime])
     uptime = 0
     print(uptime)
-   
+    
     while not (sense() or flick):
 
         inp()
@@ -81,28 +85,34 @@ def take(inp):
         print()
         print('on\noff\npeek\npower\nupt (uptime)\nhistory\nclear\ntotal')
     elif inp=='history':
-        with open('file.csv', mode='r',newline='') as file:
-            print('h')
-            if os.path.getsize('file.csv') > 0:
-                content = pd.read_csv('file.csv',encoding='utf-8')
-
-                print(content)
-            else:
-                print()
+        read()
     elif inp=='clear': 
         with open("file.csv", mode="w",newline='') as file:
             pass 
+
     elif inp=='total':
         total = 0
-        with open('file.csv', mode='r',newline='') as file:
-            print('h')
-            if os.path.getsize('file.csv') > 0:
-                content = pd.read_csv('file.csv',encoding='utf-8')
+        with open('file.csv', mode='r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                total += float(row[1])
+        
 
                 
-            total += (float((lines[i].replace('s','')[24:]).replace("\n", "")))
         print('total uptime in history:',total)
-        print('that\'s',round(total*15.4,4),'W')
+        print('that\'s',round(total*15.4,4),'Joules')
+        print('or',round((total*15.4)/360000,4),'Kilowatt Hours')
+        print('or',round(0.394*(total*15.4)/360000,4),'Kg of Carbon Dioxide')
+    elif inp=='saved':
+        
+        current_year_start = datetime(datetime.now().year, 1, 1)
+
+        current_time = datetime.now()
+
+        seconds_since_year_start = (current_time - current_year_start).total_seconds()
+        print(f"Seconds since January 1 of this year: {int(seconds_since_year_start)}")
+        
+
     elif inp =='':
         print()
     else:
