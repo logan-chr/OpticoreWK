@@ -14,12 +14,13 @@ latest = time.time()
 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 flag = False
 sensor1 = sensor()
-def htmlprint(a):
-    with open("index.html", "a") as file:
-        file.write(str('<h5>'+a+'</h5>'))
+
 def update_stats():
     global start
-    uptime = round((time.time()-start),2)
+    if  not peek():
+        uptime = round((time.time()-start),2)
+    else:
+        uptime = 0
     total = uptime
     seconds_since_year_start = (datetime.now() - datetime(datetime.now().year, 1, 1)).total_seconds()
 
@@ -28,19 +29,14 @@ def update_stats():
         csv_reader = csv.reader(file)
         for row in csv_reader:
             total += float(row[1])
-    
-    with open("index.html", "w") as file:
-        file.write(str('<h1>eco friendly website</h1>'))
-    total = round(total)
-    saved = round(seconds_since_year_start-round(total))
-    htmlprint(str('total uptime since January 1 2025: <br>'+str(total)+' seconds'))
-    htmlprint(str('that\'s '+str(round(total*15.4,4))+' Joules'))
-    htmlprint(str('or '+str(round((total*15.4)/360000,4))+' Kilowatt Hours'))
-    htmlprint(str('or '+str(round(0.394*(total*15.4)/360000,4))+' Kg of Carbon Dioxide'))
-    htmlprint(str('since January 1 2025, you have saved '+str(saved)+' seconds'))
-    htmlprint(str('that\'s '+str(round(saved*15.4/1000,4))+' Kilo Joules'))
-    htmlprint(str('or '+str(round((saved*15.4)/360000,4))+' Kilowatt Hours'))
-    htmlprint(str('or '+str(round(0.394*(saved*15.4)/360000,4))+' Kg of Carbon Dioxide'))
+    total = (total)
+    saved = round(seconds_since_year_start-(total))
+
+    add(str(str(round(0.394*(saved*15.4)/360,4))+'g'))
+def add(array):
+    with open('file.txt','w',newline='') as file:
+        file.write(array)
+
 def write(array):
     with open('file.csv','a',newline='') as file:
         writer  =csv.writer(file)

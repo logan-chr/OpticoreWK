@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco</title>
+</head>
+<h1>Eco Project</h1>
+<a href="https://github.com/loganchristensen-opticore/OpticoreWK">github</a>
+<body>
+    
+    <h4>since January 2025 you have saved</h4>
+    <div id="file-content"></div>
+    <h4>of C02</h4>
+    <h4>from using energy saving automation</h4>
+    <img src="eco.png" alt="'you" width="30%" height="30%">
+    <script>
+        const filePath = 'file.txt';
+
+        fetch(filePath)
+            .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            return response.text();
+                })
+            .then(data => {
+                document.getElementById('file-content').textContent = data;
+                
+                });
+  </script>
+
+
+</body>
+</html>
