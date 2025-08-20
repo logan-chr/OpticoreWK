@@ -17,7 +17,7 @@ sensor1 = sensor()
 
 def update_stats():
     global start
-    if  not peek():
+    if  peek():
         uptime = round((time.time()-start),2)
     else:
         uptime = 0
