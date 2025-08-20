@@ -32,13 +32,15 @@ def update_stats():
     with open("index.html", "w") as file:
         file.write(str('<h1>eco friendly website</h1>'))
     total = round(total)
+    saved = round(seconds_since_year_start-round(total))
     htmlprint(str('total uptime since January 1 2025: <br>'+str(total)+' seconds'))
     htmlprint(str('that\'s '+str(round(total*15.4,4))+' Joules'))
     htmlprint(str('or '+str(round((total*15.4)/360000,4))+' Kilowatt Hours'))
     htmlprint(str('or '+str(round(0.394*(total*15.4)/360000,4))+' Kg of Carbon Dioxide'))
-
-    htmlprint('<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Refresh Button</title></head><body><button onclick="location.reload()">Refresh Page</button>')
-    htmlprint(str('since January 1 2025, you have saved '+str(round(seconds_since_year_start-round(total)))+' seconds'))
+    htmlprint(str('since January 1 2025, you have saved '+str(saved)+' seconds'))
+    htmlprint(str('that\'s '+str(round(saved*15.4/1000,4))+' Kilo Joules'))
+    htmlprint(str('or '+str(round((saved*15.4)/360000,4))+' Kilowatt Hours'))
+    htmlprint(str('or '+str(round(0.394*(saved*15.4)/360000,4))+' Kg of Carbon Dioxide'))
 def write(array):
     with open('file.csv','a',newline='') as file:
         writer  =csv.writer(file)
@@ -75,7 +77,7 @@ def off():
     
     uptime = 0
     start = time.time()
-    update_stats()
+    
     print(uptime)
     while (not(flag) and not(sensor.scan())):
         func()
