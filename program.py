@@ -1,5 +1,5 @@
 from testswitch import switch, noshutdown,shutdown,peek,power,run
-from sensor import sense
+from sensor import sensor
 import time
 from datetime import datetime
 import keyboard
@@ -8,13 +8,13 @@ import threading
 import csv
 
 noshutdown()
-MAXTIME = 30
+MAXTIME = 10
 timeout = MAXTIME
 start = time.time()
 latest = time.time()
 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday']
-flick = False
-
+flag = False
+sensor1 = sensor()
 
 def write(array):
     with open('file.csv','a',newline='') as file:
@@ -26,14 +26,13 @@ def read():
         for row in csv_reader:
             
             print(row[0],': ',row[1])
-
 def on():
     global start
     global latest
-    global flick
+    global flag
     noshutdown()
     print('powering on')
-    flick = True        
+    flag = True        
 
     start = time.time()
 
@@ -41,7 +40,7 @@ def on():
 def off():
     global length
     global start
-    global flick
+    global flag
     w = float(power())
     shutdown()
     print('power turned off')
@@ -51,16 +50,14 @@ def off():
     write([str(datetime.now())[:-7],uptime])
     uptime = 0
     print(uptime)
-    
-    while not (sense() or flick):
-
-        inp()
-     
-    
-    flick = False
+    while (not(flag) and not(sensor.scan())):
+        func()
+        
+    print('out')
+    flag = False
     start = time.time()
 def take(inp):
-    global start, latest, flick
+    global start, latest, flag
     os.system('clear')
     print('>>>'+inp)
     if inp == 'on':
@@ -110,7 +107,14 @@ def take(inp):
         current_time = datetime.now()
 
         seconds_since_year_start = (current_time - current_year_start).total_seconds()
-        print(f"Seconds since January 1 of this year: {int(seconds_since_year_start)}")
+        total = 0
+        with open('file.csv', mode='r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                total += float(row[1])
+
+        
+
         
 
     elif inp =='':
@@ -118,19 +122,24 @@ def take(inp):
     else:
         print(inp,'is not a known instruction')
 def func():
+
    
     global latest
+    global flag
 
-    if sense():
+    if sensor.scan():
         print('s')
         latest= time.time()
-   
+        flag = True
         if not peek():
             on()
     timedif = (time.time() - latest )
-    if timedif > MAXTIME:
-        print('timeout')
-        off()
+    if timedif > MAXTIME :
+        flag = False
+        if peek():
+
+            print('timeout')
+            off()
 
         start = time.time()    
 def main_loop():
@@ -140,9 +149,9 @@ def main_loop():
         day_of_week = current_date.strftime("%A")
         if day_of_week in weekdays:
             
-            while datetime.now().hour>6 and datetime.now().hour < 20:
+            while current_date.hour > 6 and current_date.hour < 20:
                 func()
-            while datetime.now().hour<6 or datetime.now().hour > 20:
+            while current_date.hour < 6 or current_date.hour > 20:
                 if not peek():
                     print('port fa/03 has gone down, rebooting...')
                     noshutdown()
