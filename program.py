@@ -1,4 +1,4 @@
-from testswitch import switch, noshutdown,shutdown,peek,power,run
+from testswitch import switch, noshutdown,shutdown,peek,power
 from sensor import sensor
 import time
 from datetime import datetime
@@ -15,6 +15,27 @@ latest = time.time()
 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday']
 flag = False
 sensor1 = sensor()
+def htmlprint(a):
+    with open("index.html", "a") as file:
+        file.write(str('<h5>'+a+'</h5>'))
+def update_stats():
+    global start
+    uptime = round((time.time()-start),2)
+    total = uptime
+    with open('file.csv', mode='r') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            total += float(row[1])
+    
+    with open("index.html", "w") as file:
+        file.write(str('<h1>eco friendly website</h1>'))
+    total = round(total)
+    htmlprint(str('total uptime since January 1 2025: <br>'+str(total)+' seconds'))
+    htmlprint(str('that\'s '+str(round(total*15.4,4))+' Joules'))
+    htmlprint(str('or '+str(round((total*15.4)/360000,4))+' Kilowatt Hours'))
+    htmlprint(str('or '+str(round(0.394*(total*15.4)/360000,4))+' Kg of Carbon Dioxide'))
+
+    htmlprint('<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Refresh Button</title></head><body><button onclick="location.reload()">Refresh Page</button>')
 
 def write(array):
     with open('file.csv','a',newline='') as file:
@@ -38,6 +59,7 @@ def on():
 
     latest= start
 def off():
+    update_stats()
     global length
     global start
     global flag
@@ -48,6 +70,7 @@ def off():
     uptime = round((time.time()-start),2)
     print(round(w*uptime,2),' joules consumed')
     write([str(datetime.now())[:-7],uptime])
+    update_stats()
     uptime = 0
     print(uptime)
     while (not(flag) and not(sensor.scan())):
@@ -120,13 +143,18 @@ def take(inp):
     elif inp =='':
         print()
     else:
+        update_stats()
         print(inp,'is not a known instruction')
 def func():
 
-   
+    global start
     global latest
     global flag
+    uptime = round((time.time()-start),2)
+    if round(uptime/2,0) == uptime/2 and peek():
 
+
+        update_stats()
     if sensor.scan():
         print('s')
         latest= time.time()
@@ -169,6 +197,10 @@ os.system('clear')
 thread = threading.Thread(target=main_loop,daemon=True)
 
 thread.start()
+
+
+# Write to an HTML file
+
 
 inp()
 main_loop()

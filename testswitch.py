@@ -47,17 +47,3 @@ def power():
     
 
 
-def run(inp):
-        if inp == 'on':
-            noshutdown()
-        elif inp =='off':
-            shutdown()
-        elif inp=='peek':
-            peek()
-        elif inp=='power':
-            power()
-        elif inp=='upt':
-            print('total uptime:',round(time.time()-start,2))
-            print(round(MAXTIME-(time.time()-latest),2),'left')
-        else:
-            print('instruction not recognised')
