@@ -37,10 +37,7 @@ def peek():
     output = ssh.send_command('show running-config interface fastEthernet 0/3',)
     output2 = ssh.send_command('show running-config interface fastEthernet 0/5',)
     ssh.disconnect()
-    if 'shutdown' in output:
-
-        return False
-    if 'shutdown' in output2:
+    if 'shutdown' in output and 'shutdown' in output2:
         return False
     else:
         return True

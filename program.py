@@ -76,6 +76,7 @@ def off():
     start = time.time()
     
     print(uptime)
+    print(flag)
     while (not(flag) and not(sensor.scan())):
         func()
 
@@ -146,6 +147,10 @@ def take(inp):
 
     elif inp =='':
         print()
+    elif inp=='reboot':
+        flag = True
+        off()
+        on()
     else:
         update_stats()
         print(inp,'is not a known instruction')
