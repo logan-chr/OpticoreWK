@@ -2,6 +2,7 @@ import netmiko
 from netmiko import ConnectHandler
 from dotenv import load_dotenv
 import os
+import time
 load_dotenv()
 username = os.getenv('USERNAME')
 
@@ -39,6 +40,10 @@ def peek():
     ssh.disconnect()
     if 'shutdown' in output and 'shutdown' in output2:
         return False
+    elif 'shutdown' in output2 or 'shutdown' in output:
+        if round(time.time())/2 == round(round(time.time())/2):
+            print('Warning, only one Access point online. Please reboot')
+        return True
     else:
         return True
 
