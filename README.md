@@ -14,3 +14,21 @@ type help to see a list of commands or read them below
 n\noff\npeek\npower\nupt (uptime)\nhistory\nclear\ntotal
 
 
+# what do you need for this to work  
+
+rasberry pi  
+
+PIR motion sensor  
+
+cisco switch  
+
+cisco access point x2 plugged into ports 3 and 5  
+
+change thedata in the .env file to the adresses that are unique to your hardware, e.g:  
+
+HOSTNAME=ab.c.de.efg   
+
+where ab.c.de.efg is the private ip adress of your switch    
+
+plug the PIR into any power any ground and PIN 4 
+
