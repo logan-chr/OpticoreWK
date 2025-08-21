@@ -1,7 +1,6 @@
 import netmiko
 from netmiko import ConnectHandler
-import time
-import datetime
+
 
 switch = {
     'device_type':'cisco_ios',
