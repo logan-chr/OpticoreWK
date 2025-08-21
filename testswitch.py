@@ -1,14 +1,17 @@
 import netmiko
 from netmiko import ConnectHandler
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
+username = os.getenv('USERNAME')
 
 switch = {
     'device_type':'cisco_ios',
-    'host':'10.1.10.240',
-    'username':'optiadmin',
-    'password':'opt1adm1n',
+    'host':os.getenv('ADDRESS'),
+    'username':os.getenv('USERNAME'),
+    'password':os.getenv('PASSWORD'),
     'port':22,
-    'secret':'opt1adm1n'
+    'secret':os.getenv('SECRET')
 }
 
 def shutdown():
@@ -18,12 +21,15 @@ def shutdown():
     ssh.send_config_set(arr)
     ssh.disconnect
 
+
 def noshutdown():
     ssh = ConnectHandler(**switch)
     ssh.enable()
     arr = ['configure terminal','interface fastEthernet 0/3','no shutdown','exit','logout']
     ssh.send_config_set(arr)
     ssh.disconnect()
+
+
 def peek():
     ssh = ConnectHandler(**switch)
     ssh.enable()
