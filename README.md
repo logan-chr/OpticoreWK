@@ -8,6 +8,8 @@ I have used a Rasberry pi 3 which pretty much takes input from a motion sensor, 
 
 The access point turns off if there is no motion for 10 minutes and its out of work hours. It can be turned on by the sensor or the command line.  
 
+It then calculates how much energy has been saved, and converts that into kg of Carbon dioxide, which is read and output on a website (web.html)  
+
 type help to see a list of commands or read them below
 n\noff\npeek\npower\nupt (uptime)\nhistory\nclear\ntotal
 
