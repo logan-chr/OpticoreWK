@@ -32,7 +32,7 @@ def update_stats():
     total = (total)
     saved = round(seconds_since_year_start-(total))
 
-    add(str(str(round(0.394*(saved*15.4)/360,4))+'g'))
+    add(str(str(round(0.394*(saved*15.4*2)/360,4))+'g'))
 def add(array):
     
     if round(time.time())/3 == round(round(time.time())/3):
@@ -78,6 +78,7 @@ def off():
     print(uptime)
     while (not(flag) and not(sensor.scan())):
         func()
+
         
     print('out')
     flag = False
@@ -123,9 +124,9 @@ def take(inp):
 
                 
         print('total uptime in history:',total)
-        print('that\'s',round(total*15.4,4),'Joules')
-        print('or',round((total*15.4)/360000,4),'Kilowatt Hours')
-        print('or',round(0.394*(total*15.4)/360000,4),'Kg of Carbon Dioxide')
+        print('that\'s',round(total*15.4*2,4),'Joules')
+        print('or',round((total*15.4*2)/360000,4),'Kilowatt Hours')
+        print('or',round(0.394*(total*15.4*2)/360000,4),'Kg of Carbon Dioxide')
     elif inp=='saved':
         
         current_year_start = datetime(datetime.now().year, 1, 1)
@@ -184,7 +185,7 @@ def main_loop():
                 func()
             while current_date.hour < 6 or current_date.hour > 20:
                 if not peek():
-                    print('port fa/03 has gone down, rebooting...')
+                    print('port 3 and 5 has gone down, rebooting...')
                     noshutdown()
                 print('work hours')
         else:
