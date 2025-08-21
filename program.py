@@ -34,9 +34,10 @@ def update_stats():
 
     add(str(str(round(0.394*(saved*15.4)/360,4))+'g'))
 def add(array):
-    with open('file.txt','w',newline='') as file:
-        file.write(array)
-
+    
+    if round(time.time())/3 == round(round(time.time())/3):
+        with open('file.txt','w',newline='') as file:
+            file.write(array)
 def write(array):
     with open('file.csv','a',newline='') as file:
         writer  =csv.writer(file)
@@ -200,8 +201,6 @@ thread = threading.Thread(target=main_loop,daemon=True)
 
 thread.start()
 
-
-# Write to an HTML file
 
 
 inp()
