@@ -1,5 +1,7 @@
 import csv
-import pandas as pd
+#This is my only comment in this whole project.
+#This file test.py was used to test functions in a safe environment. 
+#Pretty much every function or module in the folder once was materialized in this place
 def write(array):
     with open('file.csv','a',newline='') as file:
         writer  =csv.writer(file)
