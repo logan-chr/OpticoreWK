@@ -24,11 +24,12 @@ class switch():
         ssh = ConnectHandler(**self.switch)
         ssh.enable()
         for i in range(12):
-            ssh.send_config_set(['configure terminal','interface fa0/'+str(i),'no shutdown','exit'])
-            print('h')
-            power= ssh.send_command('exit','enable','show power inline fa/03 | include auto')
-            print(power)
+            ssh.send_config_set(['configure terminal','interface fastEthernet0/'+str(i),'no shutdown','exit'])
 
+        power= ssh.send_command('show power inline  | include on')
+        self.port1 = power[4:6]
+  
+        self.port2 = power[72:74]
         ssh.disconnect
 
 

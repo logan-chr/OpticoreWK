@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 import threading
 import csv
+
 switch1 = switch()
 
 MAXTIME = 60
@@ -86,7 +87,7 @@ def off():
     flag = False
     start = time.time()
 def take(inp):
-    global start, latest, flag
+    global start, latest, flag, switch1
     os.system('clear')
     print('>>>'+inp)
     if inp == 'on':
@@ -207,10 +208,7 @@ def inp():
 os.system('clear')
 
 thread = threading.Thread(target=main_loop,daemon=True)
-
 thread.start()
-
-
 
 inp()
 main_loop()
