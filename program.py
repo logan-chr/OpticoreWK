@@ -1,12 +1,12 @@
-from testswitch import switch, noshutdown,shutdown,peek,power
+from testswitch import switch
 from sensor import sensor
 import time
 from datetime import datetime
 import os
 import threading
 import csv
+switch = switch()
 
-noshutdown()
 MAXTIME = 60
 timeout = MAXTIME
 start = time.time()
@@ -17,7 +17,7 @@ sensor1 = sensor()
 
 def update_stats():
     global start
-    if  peek():
+    if  switch.peek():
         uptime = round((time.time()-start),2)
     else:
         uptime = 0
@@ -52,7 +52,7 @@ def on():
     global start
     global latest
     global flag
-    noshutdown()
+    switch.noshutdown()
     print('powering on')
     flag = True        
 
@@ -64,8 +64,8 @@ def off():
     global length
     global start
     global flag
-    w = float(power())
-    shutdown()
+    w = float(switch.power())
+    switch.shutdown()
     print('power turned off')
         # Writing to a file
     uptime = round((time.time()-start),2)
@@ -95,11 +95,11 @@ def take(inp):
         off()
         start = time.time()
     elif inp=='peek':
-        print(peek())
+        print(switch.peek())
     elif inp=='power':
-        print(power(),'W')
+        print(switch.power(),'W')
     elif inp=='upt':
-        if peek():
+        if switch.peek():
             print('total uptime:',round(time.time()-start,2))
             print(round(MAXTIME-(time.time()-latest),2),'left')
         else:
@@ -148,6 +148,7 @@ def take(inp):
     elif inp =='':
         print()
     elif inp=='reboot':
+        switch = switch()
         flag = True
         off()
         on()
@@ -168,12 +169,12 @@ def func():
         print('s')
         latest= time.time()
         flag = True
-        if not peek():
+        if not switch.peek():
             on()
     timedif = (time.time() - latest )
     if timedif > MAXTIME :
         flag = False
-        if peek():
+        if switch.peek():
 
             print('timeout')
             off()
@@ -189,9 +190,9 @@ def main_loop():
             while current_date.hour > 6 and current_date.hour < 20:
                 func()
             while current_date.hour < 6 or current_date.hour > 20:
-                if not peek():
+                if not switch.peek():
                     print('port 3 and 5 has gone down, rebooting...')
-                    noshutdown()
+                    switch.noshutdown()
                 print('work hours')
         else:
             print('func')
@@ -203,6 +204,7 @@ def inp():
         take(a)
 
 os.system('clear')
+
 thread = threading.Thread(target=main_loop,daemon=True)
 
 thread.start()
