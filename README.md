@@ -22,7 +22,7 @@ PIR motion sensor
 
 cisco switch  
 
-cisco access point x2 plugged into ports 3 and 5  
+cisco access point x2 plugged into ANY 2 ports  
 
 change thedata in the .env file to the adresses that are unique to your hardware, e.g:  
 
