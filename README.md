@@ -15,7 +15,7 @@ type help to see a list of commands or read them below
 n\noff\npeek\npower\nupt (uptime)\nhistory\nclear\ntotal
 
 
-# what do you need for this to work  
+## what do you need for this to work  
 
 rasberry pi  
 
