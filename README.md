@@ -1,5 +1,6 @@
 # OpticoreWK
-Environmental Sustainability Project
+Environmental Sustainability Project  
+
 Access points can take like 15.4W of power, so leaving them on all the time can be very consuming  
 
 The purpose of this project is to solve this problem, via the development of automatic commands.  
